@@ -15,6 +15,7 @@ class HV518 {
 		HV518(uint8_t dataPin, uint8_t clockPin, uint8_t latchPin, uint8_t strobePin, uint8_t numDigits, uint8_t numLines, bool leftAlignDisplay);
 
 		byte getDigit(uint8_t pos);
+		byte* getDisplayMemory();
 		void setDigit(uint8_t pos, byte data);
 		void updateDisplay();
 		void clearDisplayMemory();

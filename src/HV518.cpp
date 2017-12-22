@@ -307,6 +307,10 @@ void HV518::setBrightnessStrobePWM(uint8_t brightness){
 	}
 }
 
+byte* HV518::getDisplayMemory(){
+	return displayState;
+}
+
 HV518::~HV518(){
 	if(displayState){
 		delete[] displayState;
