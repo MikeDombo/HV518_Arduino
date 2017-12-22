@@ -256,15 +256,21 @@ void HV518::displayWithAnodePWM(uint8_t duty, long dispTime){
 		onTime = duty;
 	}
 
-	uint8_t interlaceRatioOff = offTime / onTime;
-	uint8_t interlaceRatioOn = onTime / offTime;
+	uint8_t interlaceRatioOff = 0;
+	if(onTime != 0){
+		interlaceRatioOff = offTime / onTime;
+	}
+	uint8_t interlaceRatioOn = 0;
+	if(offTime != 0){
+		interlaceRatioOn = onTime / offTime;
+	}
 
 	// Loop until time is up
 	while(millis() < endTime){
 		if(offTime > onTime){
 			for(uint8_t i = 0; i < offTime && millis() < endTime; i++){
 				clearDisplay();
-				if(i % interlaceRatioOff == 0 && onTime > 0 && millis() < endTime){
+				if(interlaceRatioOff != 0 && i % interlaceRatioOff == 0 && onTime > 0 && millis() < endTime){
 					// On Display
 					memcpy(displayState, dataBak, numRegisters * sizeof(byte));
 					updateDisplay();
@@ -276,7 +282,7 @@ void HV518::displayWithAnodePWM(uint8_t duty, long dispTime){
 				// On Display
 				memcpy(displayState, dataBak, numRegisters * sizeof(byte));
 				updateDisplay();
-				if(i % interlaceRatioOn == 0 && offTime > 0 && millis() < endTime){
+				if(interlaceRatioOn != 0 && i % interlaceRatioOn == 0 && offTime > 0 && millis() < endTime){
 					clearDisplay();
 				}
 			}
