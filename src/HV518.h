@@ -26,6 +26,7 @@ class HV518 {
 		void writeNumber(uint8_t pos, long number);
 		void writeString(uint8_t pos, String str);
 		void displayWithAnodePWM(uint8_t duty, long dispTime);
+		void displayWithAnodePWM(uint8_t duty, bool (*cont)());
 		void setBrightnessStrobePWM(uint8_t brightness);
 
 		~HV518();

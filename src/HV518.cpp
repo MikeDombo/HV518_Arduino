@@ -287,6 +287,63 @@ void HV518::displayWithAnodePWM(uint8_t duty, long dispTime){
 				}
 			}
 		}
+
+		delay(0); // Added to prevent watchdog issues
+	}
+
+	// Make sure the display state is restored
+	memcpy(displayState, dataBak, numRegisters * sizeof(byte));
+}
+
+void HV518::displayWithAnodePWM(uint8_t duty, bool (*cont)()){
+	// Backup current display data
+	byte dataBak[numRegisters];
+	memcpy(dataBak, displayState, numRegisters * sizeof(byte));
+
+	uint8_t offTime = 0;
+	uint8_t onTime = 1;
+	if(duty == 0){
+		onTime = 0;
+		clearDisplay();
+	}
+	else if(duty < 255){
+		offTime = 255 - duty;
+		onTime = duty;
+	}
+
+	uint8_t interlaceRatioOff = 0;
+	if(onTime != 0){
+		interlaceRatioOff = offTime / onTime;
+	}
+	uint8_t interlaceRatioOn = 0;
+	if(offTime != 0){
+		interlaceRatioOn = onTime / offTime;
+	}
+
+	// Loop until time is up
+	while((*cont)()){
+		if(offTime > onTime){
+			for(uint8_t i = 0; i < offTime && (*cont)(); i++){
+				clearDisplay();
+				if(interlaceRatioOff != 0 && i % interlaceRatioOff == 0 && onTime > 0 && (*cont)()){
+					// On Display
+					memcpy(displayState, dataBak, numRegisters * sizeof(byte));
+					updateDisplay();
+				}
+			}
+		}
+		else{
+			for(uint8_t i = 0; i < onTime && (*cont)(); i++){
+				// On Display
+				memcpy(displayState, dataBak, numRegisters * sizeof(byte));
+				updateDisplay();
+				if(interlaceRatioOn != 0 && i % interlaceRatioOn == 0 && offTime > 0 && (*cont)()){
+					clearDisplay();
+				}
+			}
+		}
+
+		delay(0); // Added to prevent watchdog issues
 	}
 
 	// Make sure the display state is restored
