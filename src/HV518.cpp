@@ -42,6 +42,7 @@ void HV518::initDisplay(){
 	pinMode(dataPin, OUTPUT);
 	if(hasStrobe){
 		pinMode(strobePin, OUTPUT);
+		analogWriteRange(255); // Use 8 bits for brightness
 		digitalWrite(strobePin, LOW);
 	}
 
@@ -353,12 +354,14 @@ void HV518::displayWithAnodePWM(uint8_t duty, bool (*cont)()){
 void HV518::setBrightnessStrobePWM(uint8_t brightness){
 	if(hasStrobe){
 		if(brightness > 0 && brightness < 255){ // PWM
-			analogWrite(strobePin, brightness);
+			analogWrite(strobePin, 255-brightness);
 		}
 		else if(brightness == 0){ // Steady-state off
+			analogWrite(strobePin, 0);
 			digitalWrite(strobePin, HIGH);
 		}
 		else{ // Steady-state on
+			analogWrite(strobePin, 0);
 			digitalWrite(strobePin, LOW);
 		}
 	}
