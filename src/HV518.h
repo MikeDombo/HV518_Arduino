@@ -1,11 +1,47 @@
 #ifndef HV518_h
-#define HV518_h
+#define HV518_h=
+
+#if defined(__AVR__)
+#include <avr/pgmspace.h>
+#elif defined(ESP8266)
+#include <pgmspace.h>
+#endif
 
 #if (ARDUINO >= 100)
 #include <Arduino.h>
 #else
 #include <WProgram.h>
-#endif /* Arduino */
+#endif
+
+const static byte digits[] PROGMEM = {
+	0b01111110, // 0
+	0b00001100, // 1
+	0b10110110, // 2
+	0b10011110, // 3
+	0b11001100, // 4
+	0b11011010, // 5
+	0b11111010, // 6
+	0b00001110, // 7
+	0b11111110, // 8
+	0b11011110  // 9
+};
+
+const static struct PROGMEM {
+	byte degree = 0b11000110;
+	byte rightColonDot = 0b00100000;
+	byte leftColonDot = 0b10000000;
+	byte rightColonLine = 0b00010000;
+	byte leftColonLine = 0b01000000;
+	byte colonDot = 0b10100000;
+	byte colonLine = 0b01010000;
+} specialChars;
+
+const static struct PROGMEM {
+	byte period = 0b00000001;
+	byte underscore = 0b00010000;
+	byte hyphen = 0b10000000;
+	byte equal = 0b10010000;
+} punctuation;
 
 class HV518 {
 	public:
@@ -30,36 +66,6 @@ class HV518 {
 		void setBrightnessStrobePWM(uint8_t brightness);
 
 		~HV518();
-
-		const byte digits[10] = {
-			0b01111110, // 0
-			0b00001100, // 1
-			0b10110110, // 2
-			0b10011110, // 3
-			0b11001100, // 4
-			0b11011010, // 5
-			0b11111010, // 6
-			0b00001110, // 7
-			0b11111110, // 8
-			0b11011110  // 9
-		};
-
-		const struct {
-			byte degree = 0b11000110;
-			byte rightColonDot = 0b00100000;
-			byte leftColonDot = 0b10000000;
-			byte rightColonLine = 0b00010000;
-			byte leftColonLine = 0b01000000;
-			byte colonDot = 0b10100000;
-			byte colonLine = 0b01010000;
-		} specialChars;
-
-		const struct {
-			byte period = 0b00000001;
-			byte underscore = 0b00010000;
-			byte hyphen = 0b10000000;
-			byte equal = 0b10010000;
-		} punctuation;
 
 	private:
 		uint8_t dataPin;

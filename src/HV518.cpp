@@ -122,7 +122,7 @@ void HV518::writeSingleDigit(uint8_t pos, uint8_t number){
 			}
 		}
 
-		setDigit(pos, digits[number]);
+		setDigit(pos, pgm_read_byte_near(digits + number));
 	}
 }
 
@@ -197,7 +197,7 @@ void HV518::writeString(uint8_t pos, String str){
 		if(c >= 48 && c <= 57){
 			c -= 48;
 			// OR with current data to keep period (if any)
-			setDigit(pos++, digits[c] | getDigit(pos));		
+			setDigit(pos++, pgm_read_byte_near(digits + c) | getDigit(pos));		
 		}
 		else if(c == '-'){
 			setDigit(pos++, punctuation.hyphen | getDigit(pos));
