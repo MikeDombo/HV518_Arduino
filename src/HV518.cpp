@@ -197,7 +197,15 @@ void HV518::writeString(uint8_t pos, String str){
 		if(c >= 48 && c <= 57){
 			c -= 48;
 			// OR with current data to keep period (if any)
-			setDigit(pos++, pgm_read_byte_near(digits + c) | getDigit(pos));		
+			setDigit(pos++, pgm_read_byte_near(digits + c) | getDigit(pos));
+		}
+		else if(c >= 65 && c <= 90){
+			c -= 65;
+			setDigit(pos++, pgm_read_byte_near(letters + c) | getDigit(pos));
+		}
+		else if(c >= 97 && c <= 122){
+			c -= 97;
+			setDigit(pos++, pgm_read_byte_near(letters + c) | getDigit(pos));
 		}
 		else if(c == '-'){
 			setDigit(pos++, punctuation.hyphen | getDigit(pos));
