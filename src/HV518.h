@@ -1,5 +1,5 @@
 #ifndef HV518_h
-#define HV518_h=
+#define HV518_h
 
 #if defined(__AVR__)
 #include <avr/pgmspace.h>
@@ -47,7 +47,7 @@ const static byte letters[] PROGMEM = {
 	0b10100000, // r
 	0b11011010, // S (5)
 	0b11110000, // t
-	0b00111000, // u
+	0b01111100, // U
 	0, // v
 	0, // w
 	0, // x
