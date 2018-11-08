@@ -72,10 +72,10 @@ void loop() {
     
     // Alternate between colon line and dot
     if(seconds % 2 == 0){
-      disp.setDigit(6, disp.specialChars.colonDot);
+      disp.setDigit(6, specialChars.colonDot);
     }
     else{
-      disp.setDigit(6, disp.specialChars.colonLine);
+      disp.setDigit(6, specialChars.colonLine);
     }
 
     // Write to display
